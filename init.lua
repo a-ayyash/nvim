@@ -342,13 +342,6 @@ require("lazy").setup({
 			{ "folke/neodev.nvim", opts = {} },
 		},
 		config = function()
-			local lspconfig = require("lspconfig")
-
-			-- import mason_lspconfig plugin
-			local mason_lspconfig = require("mason-lspconfig")
-
-			-- import cmp-nvim-lsp plugin
-			local cmp_nvim_lsp = require("cmp_nvim_lsp")
 			-- Brief aside: **What is LSP?**
 			--
 			-- LSP is an initialism you've probably heard, but might not understand what it is.
@@ -543,60 +536,6 @@ require("lazy").setup({
 				"stylua", -- Used to format Lua code
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
-			mason_lspconfig.setup_handlers({
-				-- default handler for installed servers
-				function(server_name)
-					lspconfig[server_name].setup({
-						capabilities = capabilities,
-					})
-				end,
-				["gopls"] = function()
-					lspconfig["gopls"].setup({
-						capabilities = capabilities,
-						filetypes = { "go", "mod" },
-					})
-				end,
-				["tsserver"] = function()
-					lspconfig["tsserver"].setup({
-						capabilities = capabilities,
-						filetypes = { "typescript", "typescriptreact", "javascriptreact", "typescript.tsx" },
-						cmd = { "typescript-language-server", "--stdio" },
-					})
-				end,
-				["emmet_ls"] = function()
-					-- configure emmet language server
-					lspconfig["emmet_ls"].setup({
-						capabilities = capabilities,
-						filetypes = {
-							"html",
-							"typescriptreact",
-							"javascriptreact",
-							"css",
-							"sass",
-							"scss",
-							"less",
-							"svelte",
-						},
-					})
-				end,
-				["lua_ls"] = function()
-					-- configure lua server (with special settings)
-					lspconfig["lua_ls"].setup({
-						capabilities = capabilities,
-						settings = {
-							Lua = {
-								-- make the language server recognize "vim" global
-								diagnostics = {
-									globals = { "vim" },
-								},
-								completion = {
-									callSnippet = "Replace",
-								},
-							},
-						},
-					})
-				end,
-			})
 			require("mason-lspconfig").setup({
 				handlers = {
 					function(server_name)
@@ -672,7 +611,6 @@ require("lazy").setup({
 			-- See `:help cmp`
 			local cmp = require("cmp")
 			local luasnip = require("luasnip")
-			local lspkind = require("lspkind")
 			require("luasnip.loaders.from_vscode").lazy_load()
 			luasnip.config.setup({})
 
@@ -701,18 +639,9 @@ require("lazy").setup({
 					{ name = "buffer" }, -- text within current buffer
 					{ name = "path" }, -- file system paths
 				}),
-
-				-- configure lspkind for vs-code like pictograms in completion menu
-				formatting = {
-					format = lspkind.cmp_format({
-						maxwidth = 50,
-						ellipsis_char = "...",
-					}),
-				},
 			})
 		end,
 	},
-
 	{ -- You can easily change to a different colorscheme.
 		-- Change the name of the colorscheme plugin below, and then
 		-- change the command in the config to whatever the name of that colorscheme is.
