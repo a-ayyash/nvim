@@ -1,2 +1,2 @@
-require("ayyash.core")
-require("ayyash.lazy")
+require("ayyashio.core")
+require("ayyashio.lazy")
